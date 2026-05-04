@@ -1,0 +1,20 @@
+{
+  "name": "traffic-emission-system",
+  "version": "1.0.0",
+  "description": "This is a full-stack, 4-module system designed to predict traffic-based pollution, track real-time AQI across zones, and securely log critical emission events to a Polygon-based blockchain ledger.",
+  "main": "index.js",
+  "scripts": {
+    "start:backend": "cd backend && node src/server.js",
+    "start:frontend": "cd frontend && npm run dev",
+    "start:ml": "cd ml-service && uvicorn app.main:app --reload --port 8000",
+    "start:blockchain": "cd blockchain && npx hardhat node",
+    "start:all": "concurrently \"npm run start:blockchain\" \"npm run start:backend\" \"npm run start:ml\" \"npm run start:frontend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
