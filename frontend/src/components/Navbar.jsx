@@ -1,38 +1,38 @@
 import React from 'react';
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search, Command } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
   return (
     <motion.div 
-      initial={{ y: -50, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="h-20 border-b border-white/5 bg-slate-900/50 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40"
+      transition={{ duration: 0.3 }}
+      className="h-16 border-b border-slate-800 bg-[#0F172A]/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40"
     >
-      <div className="flex items-center bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 w-96 transition-all focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-500">
-        <Search size={18} className="text-slate-400 mr-2" />
-        <input 
-          type="text" 
-          placeholder="Search analytics, zones..." 
-          className="bg-transparent border-none outline-none text-slate-200 text-sm w-full placeholder-slate-500"
-        />
-      </div>
+      <button className="flex items-center bg-[#1E293B] hover:bg-[#243041] border border-slate-700/80 rounded-lg px-3 py-1.5 w-64 lg:w-96 transition-all shadow-sm group">
+        <Search size={14} className="text-slate-400 mr-2 group-hover:text-slate-300" />
+        <span className="text-slate-400 text-[13px] flex-1 text-left group-hover:text-slate-300 transition-colors">Search platform...</span>
+        <div className="hidden sm:flex items-center space-x-1 text-slate-500 bg-[#0F172A] px-1.5 py-0.5 rounded text-[10px] font-bold border border-slate-700/50">
+          <Command size={10} />
+          <span>K</span>
+        </div>
+      </button>
 
       <div className="flex items-center space-x-4">
-        <button className="relative p-2 rounded-full bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 transition-colors">
-          <Bell size={20} className="text-slate-300" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-sky-500 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"></span>
+        <button className="relative p-1.5 rounded-md hover:bg-slate-800 transition-colors text-slate-400 hover:text-slate-200">
+          <Bell size={18} />
+          <span className="absolute top-1 right-1.5 w-1.5 h-1.5 bg-sky-500 rounded-full"></span>
         </button>
-        <div className="flex items-center space-x-3 border-l border-slate-700 pl-4">
+        <div className="flex items-center space-x-3 border-l border-slate-800 pl-4">
           <div className="text-right hidden md:block">
-            <p className="text-sm font-medium text-slate-200">Admin User</p>
-            <p className="text-xs text-sky-400">Premium Plan</p>
+            <p className="text-[13px] font-medium text-slate-200 leading-tight">Admin User</p>
+            <p className="text-[11px] text-slate-500 font-medium">EcoTracker Pro</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-violet-500 p-[2px]">
-            <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center">
-               <User size={18} className="text-slate-300" />
-            </div>
+          <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center">
+             <div className="w-full h-full bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+               A
+             </div>
           </div>
         </div>
       </div>

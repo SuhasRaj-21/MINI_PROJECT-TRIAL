@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Map, TrendingUp, Route, Bell } from 'lucide-react';
+import { LayoutDashboard, Map, TrendingUp, Route, Bell, BarChart, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Sidebar = () => {
@@ -9,40 +9,46 @@ const Sidebar = () => {
       initial={{ x: -250 }}
       animate={{ x: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="w-64 border-r border-white/5 bg-slate-900/80 backdrop-blur-xl flex flex-col h-full z-50 relative"
+      className="w-64 border-r border-slate-800 bg-[#0F172A] flex flex-col h-full z-50 relative"
     >
-      <div className="h-20 flex items-center px-6 border-b border-white/5">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-violet-500 flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.5)]">
-            <span className="font-bold text-white text-lg leading-none">E</span>
+      <div className="h-16 flex items-center px-6 border-b border-slate-800">
+        <div className="flex items-center space-x-3">
+          <div className="w-7 h-7 rounded-md bg-slate-100 flex items-center justify-center">
+            <span className="font-bold text-slate-900 text-sm leading-none">E</span>
           </div>
-          <span className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-violet-400">
+          <span className="text-[15px] font-semibold tracking-wide text-slate-200">
             EcoTracker
           </span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-        <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Main Menu</p>
-        <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-        <NavItem to="/dashboard/map" icon={<Map size={20} />} label="Live Map" />
-        <NavItem to="/dashboard/predict" icon={<TrendingUp size={20} />} label="AI Prediction" />
-        <NavItem to="/dashboard/route" icon={<Route size={20} />} label="Route Planner" />
-        <NavItem to="/dashboard/alerts" icon={<Bell size={20} />} label="Alerts & Logs" />
+      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <p className="px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">Overview</p>
+        <NavItem to="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" />
+        <NavItem to="/dashboard/map" icon={<Map size={18} />} label="Live Map" />
+        <NavItem to="/dashboard/analytics" icon={<BarChart size={18} />} label="Analytics" />
+        
+        <div className="mt-6">
+          <p className="px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-6">Intelligence</p>
+          <NavItem to="/dashboard/predict" icon={<TrendingUp size={18} />} label="AI Forecast" />
+          <NavItem to="/dashboard/route" icon={<Route size={18} />} label="Smart Routes" />
+        </div>
+
+        <div className="mt-6">
+          <p className="px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-6">System</p>
+          <NavItem to="/dashboard/alerts" icon={<Bell size={18} />} label="Security Logs" />
+          <NavItem to="/dashboard/settings" icon={<Settings size={18} />} label="Settings" disabled={true} />
+        </div>
       </div>
 
-      <div className="p-4 border-t border-white/5">
-        <div className="p-4 rounded-xl bg-gradient-to-br from-sky-900/40 to-violet-900/40 border border-sky-500/20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-sky-500/20 rounded-full blur-2xl"></div>
-          <h4 className="text-sm font-semibold text-white mb-1 relative z-10">System Status</h4>
-          <p className="text-xs text-sky-200 relative z-10">All nodes operational</p>
-          <div className="mt-3 w-full h-1 bg-slate-800 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 1.5 }}
-              className="h-full bg-gradient-to-r from-sky-400 to-violet-500"
-            ></motion.div>
+      <div className="p-4 border-t border-slate-800">
+        <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50 relative overflow-hidden">
+          <div className="flex items-center space-x-2 mb-2 relative z-10">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <h4 className="text-[13px] font-medium text-slate-300">System Normal</h4>
+          </div>
+          <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden relative z-10">
+            <div className="h-full w-full bg-slate-600 rounded-full"></div>
           </div>
         </div>
       </div>
@@ -50,33 +56,38 @@ const Sidebar = () => {
   );
 };
 
-const NavItem = ({ to, icon, label }) => (
-  <NavLink
-    to={to}
-    end={to === "/dashboard"}
-    className={({ isActive }) =>
-      `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden group ${
-        isActive 
-          ? 'text-white bg-slate-800/80 border border-slate-700/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]' 
-          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
-      }`
-    }
-  >
-    {({ isActive }) => (
-      <>
-        {isActive && (
-          <motion.div 
-            layoutId="active-nav"
-            className="absolute left-0 top-0 w-1 h-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.8)]"
-          />
-        )}
-        <span className={`${isActive ? 'text-sky-400' : 'group-hover:text-sky-400'} transition-colors`}>
-          {icon}
-        </span>
-        <span className="font-medium">{label}</span>
-      </>
-    )}
-  </NavLink>
-);
+const NavItem = ({ to, icon, label, disabled }) => {
+  if (disabled) {
+    return (
+      <div className="flex items-center space-x-3 px-3 py-2 rounded-md transition-all duration-200 text-slate-600 opacity-50 cursor-not-allowed">
+        <span>{icon}</span>
+        <span className="font-medium text-sm">{label}</span>
+      </div>
+    );
+  }
+
+  return (
+    <NavLink
+      to={to}
+      end={to === "/dashboard"}
+      className={({ isActive }) =>
+        `flex items-center space-x-3 px-3 py-2 rounded-md transition-all duration-200 relative group ${
+          isActive 
+            ? 'text-slate-100 bg-slate-800/80 font-medium shadow-sm' 
+            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span className={`${isActive ? 'text-slate-100' : 'group-hover:text-slate-200'} transition-colors`}>
+            {icon}
+          </span>
+          <span className="font-medium text-[14px]">{label}</span>
+        </>
+      )}
+    </NavLink>
+  );
+};
 
 export default Sidebar;

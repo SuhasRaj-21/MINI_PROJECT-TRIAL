@@ -107,35 +107,36 @@ const LiveMap = () => {
     >
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100 flex items-center">
-            <MapIcon className="mr-3 text-sky-400" size={32} />
-            Live Global Heatmap
+          <h1 className="text-2xl font-bold text-slate-100 flex items-center tracking-tight">
+            <MapIcon className="mr-3 text-sky-400" size={24} />
+            Global Emission Heatmap
           </h1>
-          <p className="text-slate-400 mt-1">Real-time geographical emission distribution.</p>
+          <p className="text-slate-400 mt-1 text-sm">Real-time geographical emission distribution across zones.</p>
         </div>
       </div>
       
-      <div className="flex-1 glass-card rounded-2xl overflow-hidden relative z-0 border border-slate-700/50 shadow-[0_0_40px_rgba(0,0,0,0.5)] p-2" style={{ minHeight: '600px' }}>
-        <div className="w-full h-full rounded-xl overflow-hidden relative">
-          {/* Overlay to give it a techy feel */}
-          <div className="absolute inset-0 pointer-events-none border border-sky-500/20 rounded-xl z-20"></div>
+      <div className="flex-1 glass-card rounded-2xl overflow-hidden relative z-0 p-1.5" style={{ minHeight: '600px' }}>
+        <div className="w-full h-full rounded-xl overflow-hidden relative border border-slate-700/50">
           
-          <MapContainer center={center} zoom={5} className="h-full w-full">
+          <MapContainer center={center} zoom={5} className="h-full w-full bg-[#0F172A]">
             <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; OpenStreetMap contributors'
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution='&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
             />
             <HeatmapLayer zonesData={zones} />
           </MapContainer>
 
           {/* Floating Legend */}
-          <div className="absolute bottom-6 right-6 z-[400] glass-panel p-4 rounded-xl border border-slate-700">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-3">AQI Intensity</h4>
+          <div className="absolute bottom-6 right-6 z-[400] bg-[#1E293B]/90 backdrop-blur-md p-4 rounded-xl border border-slate-700 shadow-xl">
+            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">AQI Intensity</h4>
             <div className="space-y-2">
               <LegendItem color="bg-sky-400" label="Good (0-50)" />
               <LegendItem color="bg-amber-400" label="Moderate (51-100)" />
               <LegendItem color="bg-rose-400" label="Unhealthy (101-200)" />
-              <LegendItem color="bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.8)]" label="Hazardous (200+)" />
+              <LegendItem color="bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.5)]" label="Hazardous (200+)" />
             </div>
           </div>
         </div>
@@ -146,7 +147,7 @@ const LiveMap = () => {
 
 const LegendItem = ({ color, label }) => (
   <div className="flex items-center space-x-2">
-    <div className={`w-3 h-3 rounded-full ${color}`}></div>
+    <div className={`w-2.5 h-2.5 rounded-full ${color}`}></div>
     <span className="text-xs text-slate-300 font-medium">{label}</span>
   </div>
 );

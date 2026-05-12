@@ -27,7 +27,6 @@ const FitBounds = ({ fastCoords, cleanCoords }) => {
   return null;
 };
 
-// Component to handle map clicks and reverse geocode
 const MapClickEventHandler = ({ setDestination }) => {
   useMapEvents({
     click: async (e) => {
@@ -77,30 +76,30 @@ const AutocompleteInput = ({ placeholder, value, onChange, iconColor = "text-sky
     <div className="relative w-full">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <MapPin size={18} className={iconColor} />
+          <MapPin size={16} className={iconColor} />
         </div>
         <input
           type="text"
           placeholder={placeholder}
-          className="input-premium pl-10 w-full text-sm"
+          className="input-premium pl-9 w-full text-[13px] py-2 bg-[#0F172A]"
           value={value}
           onChange={handleChange}
           onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
         />
       </div>
       {showDropdown && suggestions.length > 0 && (
-        <ul className="absolute z-[1000] w-full bg-slate-800 border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.8)] rounded-lg mt-2 max-h-60 overflow-y-auto backdrop-blur-xl">
+        <ul className="absolute z-[1000] w-full bg-[#1E293B] border border-slate-700 shadow-2xl rounded-lg mt-2 max-h-60 overflow-y-auto backdrop-blur-xl py-1">
           {suggestions.map((item, idx) => (
             <li 
               key={idx} 
-              className="p-3 hover:bg-slate-700/50 cursor-pointer border-b border-slate-700/50 last:border-0 text-sm text-slate-200 flex flex-col transition-colors"
+              className="px-4 py-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0 flex flex-col transition-colors"
               onMouseDown={() => {
                 onChange(item.display_name);
                 setShowDropdown(false);
               }}
             >
-              <span className={`font-semibold ${iconColor}`}>{item.name || item.display_name.split(',')[0]}</span>
-              <span className="text-xs text-slate-400 truncate">{item.display_name}</span>
+              <span className={`font-semibold text-[13px] ${iconColor}`}>{item.name || item.display_name.split(',')[0]}</span>
+              <span className="text-xs text-slate-500 truncate">{item.display_name}</span>
             </li>
           ))}
         </ul>
@@ -157,7 +156,6 @@ const RoutePlanner = () => {
         const pDurationMins = Math.round(primaryRoute.duration / 60);
         const pCoords = primaryRoute.geometry.coordinates.map(coord => [coord[1], coord[0]]);
         
-        // Use Actual AI ML Service for prediction
         let primaryExposure = 75; 
         let primaryRisk = 'Moderate';
         
@@ -187,7 +185,6 @@ const RoutePlanner = () => {
 
         let cleanAltObj = null;
 
-        // Generate Alternative Route ONLY if AI predicts AQI is MORE than 100 (Unhealthy)
         if (primaryExposure > 100 && routeRes.data.routes.length > 1) {
             const altRoute = routeRes.data.routes[1];
             const aDistanceKm = (altRoute.distance / 1000).toFixed(1);
@@ -225,7 +222,7 @@ const RoutePlanner = () => {
       }
     } catch (error) {
       console.error("Routing error:", error);
-      alert("Error fetching route data. The free API might be rate-limited.");
+      alert("Error fetching route data.");
     } finally {
       setLoading(false);
     }
@@ -239,21 +236,21 @@ const RoutePlanner = () => {
     >
       <div className="flex justify-between items-end flex-shrink-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100 tracking-tight">AI Route Optimizer</h1>
-          <p className="text-slate-400 mt-1">Discover routes optimized for minimum pollution exposure. Click anywhere on the map to set a destination.</p>
+          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">AI Route Optimizer</h1>
+          <p className="text-slate-400 mt-1 text-sm">Discover routes optimized for minimum pollution exposure.</p>
         </div>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
         
         {/* Left Sidebar: Controls & Results */}
-        <div className="lg:col-span-1 flex flex-col space-y-6 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="lg:col-span-1 flex flex-col space-y-6 overflow-y-auto pr-1 custom-scrollbar">
           
           {/* Controls Card */}
-          <div className="glass-card p-6 rounded-2xl relative z-10 overflow-visible border border-slate-700/50">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">Trip Parameters</h2>
+          <div className="glass-card p-5 relative z-10 overflow-visible">
+            <h2 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Trip Parameters</h2>
             
-            <div className="flex flex-col space-y-2 relative">
+            <div className="flex flex-col space-y-3 relative">
               <AutocompleteInput 
                 placeholder="Starting Location" 
                 value={source}
@@ -265,21 +262,21 @@ const RoutePlanner = () => {
                 placeholder="Destination (or click map)" 
                 value={destination}
                 onChange={setDestination}
-                iconColor="text-violet-400"
+                iconColor="text-indigo-400"
               />
             </div>
             
             <button 
               onClick={handleFindRoutes}
               disabled={loading}
-              className="btn-primary w-full px-6 py-3 mt-6 rounded-xl font-bold flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-all"
+              className="w-full px-4 py-3 mt-5 rounded-xl font-bold text-sm flex items-center justify-center transition-all bg-sky-600 hover:bg-sky-500 text-white shadow-lg shadow-sky-900/20 border border-sky-500"
             >
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
                 <>
-                  <Navigation size={18} className="mr-2" />
-                  Generate Smart Route
+                  <Search size={16} className="mr-2" />
+                  Search Optimized Route
                 </>
               )}
             </button>
@@ -288,37 +285,36 @@ const RoutePlanner = () => {
           {/* Results Panel */}
           {results && (
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col space-y-4"
             >
               {/* Primary / Fastest Route */}
-              <div className={`p-5 rounded-2xl border backdrop-blur-xl shadow-xl overflow-hidden relative ${results.fast.exposure > 100 ? 'bg-rose-950/20 border-rose-500/30' : 'bg-sky-950/20 border-sky-500/30'}`}>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-500 to-transparent opacity-30"></div>
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className={`font-bold text-md flex items-center ${results.fast.exposure > 100 ? 'text-rose-400' : 'text-sky-400'}`}>
-                      <Navigation size={16} className="mr-2" /> Fastest Route
+              <div className={`p-4 rounded-xl border bg-[#1E293B]/80 backdrop-blur-md shadow-lg ${results.fast.exposure > 100 ? 'border-rose-500/30' : 'border-slate-700/80'}`}>
+                <div className="flex justify-between items-center mb-3">
+                    <h3 className={`font-semibold text-[13px] flex items-center ${results.fast.exposure > 100 ? 'text-rose-400' : 'text-sky-400'}`}>
+                      <Navigation size={14} className="mr-1.5" /> Fastest Route
                     </h3>
-                    <span className={`px-2 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider border ${results.fast.exposure > 100 ? 'bg-rose-500/10 border-rose-500/30 text-rose-300' : 'bg-sky-500/10 border-sky-500/30 text-sky-300'}`}>Primary</span>
+                    <span className="px-2 py-0.5 text-[9px] font-bold rounded bg-[#0F172A] border border-slate-700 text-slate-300 uppercase tracking-wider">Primary</span>
                 </div>
-                <div className="bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 space-y-2">
+                <div className="bg-[#0F172A]/50 p-3 rounded-lg border border-slate-800 space-y-1.5">
                     <div className="flex justify-between text-xs">
-                        <span className="text-slate-400">Distance:</span>
-                        <span className="font-bold text-slate-200">{results.fast.distance}</span>
+                        <span className="text-slate-500">Distance:</span>
+                        <span className="font-semibold text-slate-300">{results.fast.distance}</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                        <span className="text-slate-400">Est. Time:</span>
-                        <span className="font-bold text-slate-200">{results.fast.time}</span>
+                        <span className="text-slate-500">Est. Time:</span>
+                        <span className="font-semibold text-slate-300">{results.fast.time}</span>
                     </div>
-                    <div className="flex justify-between text-xs border-t border-slate-700/50 pt-2 mt-2">
-                        <span className="text-slate-400">AQI Exp:</span>
-                        <span className={`font-bold ${results.fast.exposure > 150 ? 'text-rose-400' : results.fast.exposure > 80 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                    <div className="flex justify-between text-xs border-t border-slate-800 pt-1.5 mt-1.5">
+                        <span className="text-slate-500">AQI Exp:</span>
+                        <span className={`font-semibold ${results.fast.exposure > 150 ? 'text-rose-400' : results.fast.exposure > 80 ? 'text-amber-400' : 'text-emerald-400'}`}>
                             {results.fast.exposure} ({results.fast.risk})
                         </span>
                     </div>
                 </div>
                 {results.fast.exposure > 100 && (
-                    <div className="mt-3 flex items-start text-rose-400 text-[10px] font-medium bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
+                    <div className="mt-2.5 flex items-start text-rose-400 text-[11px] font-medium bg-rose-500/10 p-2 rounded-md border border-rose-500/20">
                       <Info size={12} className="mr-1.5 mt-0.5 shrink-0" />
                       <p>High pollution risk.</p>
                     </div>
@@ -327,23 +323,23 @@ const RoutePlanner = () => {
 
               {/* Alternative Clean Route */}
               {results.clean ? (
-                <div className="bg-emerald-950/20 p-5 rounded-2xl border border-emerald-500/30 backdrop-blur-xl shadow-xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white text-[9px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.5)]">Rec</div>
-                  <h3 className="text-emerald-400 font-bold text-md mb-4 flex items-center">
-                    <Navigation size={16} className="mr-2" /> Clean Alternative
+                <div className="bg-[#1E293B]/80 p-4 rounded-xl border border-emerald-500/30 backdrop-blur-md shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-bl-md uppercase tracking-wider border-b border-l border-emerald-500/30">Rec</div>
+                  <h3 className="text-emerald-400 font-semibold text-[13px] mb-3 flex items-center">
+                    <Navigation size={14} className="mr-1.5" /> Clean Alternative
                   </h3>
-                  <div className="bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 space-y-2">
+                  <div className="bg-[#0F172A]/50 p-3 rounded-lg border border-slate-800 space-y-1.5">
                       <div className="flex justify-between text-xs">
-                          <span className="text-slate-400">Distance:</span>
-                          <span className="font-bold text-slate-200">{results.clean.distance}</span>
+                          <span className="text-slate-500">Distance:</span>
+                          <span className="font-semibold text-slate-300">{results.clean.distance}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                          <span className="text-slate-400">Est. Time:</span>
-                          <span className="font-bold text-slate-200">{results.clean.time}</span>
+                          <span className="text-slate-500">Est. Time:</span>
+                          <span className="font-semibold text-slate-300">{results.clean.time}</span>
                       </div>
-                      <div className="flex justify-between text-xs border-t border-slate-700/50 pt-2 mt-2">
-                          <span className="text-slate-400">AQI Exp:</span>
-                          <span className="font-bold text-emerald-400 text-glow-cyan">
+                      <div className="flex justify-between text-xs border-t border-slate-800 pt-1.5 mt-1.5">
+                          <span className="text-slate-500">AQI Exp:</span>
+                          <span className="font-semibold text-emerald-400">
                               {results.clean.exposure} ({results.clean.risk})
                           </span>
                       </div>
@@ -351,8 +347,8 @@ const RoutePlanner = () => {
                 </div>
               ) : (
                   results.fast.exposure <= 100 && (
-                      <div className="bg-emerald-950/20 p-4 rounded-2xl border border-emerald-500/30 flex items-center justify-center text-center backdrop-blur-xl">
-                          <p className="text-emerald-400 text-[10px] font-medium">Optimal air quality. No alt needed.</p>
+                      <div className="bg-[#1E293B]/50 p-3 rounded-xl border border-slate-700/50 flex items-center justify-center text-center">
+                          <p className="text-emerald-500 text-[10px] font-medium uppercase tracking-wider">Optimal air quality. No alt needed.</p>
                       </div>
                   )
               )}
@@ -362,14 +358,16 @@ const RoutePlanner = () => {
         </div>
 
         {/* Right Side: Map Viewer */}
-        <div className="glass-card rounded-2xl overflow-hidden lg:col-span-3 relative z-0 border border-slate-700/50 p-2 min-h-[400px]">
-           <div className="w-full h-full rounded-xl overflow-hidden relative">
-             <div className="absolute inset-0 pointer-events-none border border-sky-500/20 rounded-xl z-20"></div>
+        <div className="glass-card overflow-hidden lg:col-span-3 relative z-0 p-1.5 min-h-[400px]">
+           <div className="w-full h-full rounded-xl overflow-hidden relative border border-slate-800">
              
-             <MapContainer center={mapCenter} zoom={6} className="h-full w-full cursor-crosshair">
+             <MapContainer center={mapCenter} zoom={6} className="h-full w-full bg-[#0F172A] cursor-crosshair">
                <TileLayer
-                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                 attribution='&copy; OpenStreetMap contributors'
+                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                 attribution='&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+               />
+               <TileLayer
+                 url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
                />
                <MapClickEventHandler setDestination={setDestination} />
                
@@ -378,25 +376,25 @@ const RoutePlanner = () => {
                    <Polyline 
                      positions={results.fast.coords} 
                      color={results.fast.exposure > 100 ? '#F43F5E' : '#38BDF8'} 
-                     weight={results.clean ? 4 : 6} 
-                     opacity={results.clean ? 0.6 : 0.8} 
-                     dashArray={results.clean ? "5, 10" : null}
+                     weight={results.clean ? 3 : 5} 
+                     opacity={results.clean ? 0.5 : 0.8} 
+                     dashArray={results.clean ? "5, 5" : null}
                    />
                    
                    {results.clean && (
                      <Polyline 
                         positions={results.clean.coords} 
                         color="#10B981" 
-                        weight={6} 
+                        weight={5} 
                         opacity={1.0} 
                      />
                    )}
                    
                    <Marker position={results.fast.coords[0]}>
-                     <Popup className="custom-popup"><strong className="text-sky-500">Start:</strong> {results.fast.srcName}</Popup>
+                     <Popup className="custom-popup"><strong className="text-slate-200">Start:</strong> <span className="text-slate-400">{results.fast.srcName}</span></Popup>
                    </Marker>
                    <Marker position={results.fast.coords[results.fast.coords.length - 1]}>
-                     <Popup className="custom-popup"><strong className="text-violet-500">End:</strong> {results.fast.destName}</Popup>
+                     <Popup className="custom-popup"><strong className="text-slate-200">End:</strong> <span className="text-slate-400">{results.fast.destName}</span></Popup>
                    </Marker>
 
                    <FitBounds 

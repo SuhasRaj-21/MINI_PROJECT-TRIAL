@@ -88,10 +88,10 @@ const Prediction = () => {
         label: 'Predicted AQI Trend',
         data: chartData,
         borderColor: 'rgba(56, 189, 248, 1)',
-        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+        backgroundColor: 'rgba(56, 189, 248, 0.05)',
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: '#0F172A',
+        pointBackgroundColor: '#1E293B',
         pointBorderColor: 'rgba(56, 189, 248, 1)',
         pointBorderWidth: 2,
         pointRadius: 4,
@@ -106,10 +106,10 @@ const Prediction = () => {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        backgroundColor: '#0F172A',
         titleColor: '#F8FAFC',
         bodyColor: '#cbd5e1',
-        borderColor: 'rgba(56, 189, 248, 0.3)',
+        borderColor: '#334155',
         borderWidth: 1,
         padding: 10,
         cornerRadius: 8,
@@ -117,12 +117,12 @@ const Prediction = () => {
     },
     scales: {
       x: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-        ticks: { color: '#94a3b8' }
+        grid: { color: 'rgba(255, 255, 255, 0.03)', drawBorder: false },
+        ticks: { color: '#64748b' }
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-        ticks: { color: '#94a3b8' }
+        grid: { color: 'rgba(255, 255, 255, 0.03)', drawBorder: false },
+        ticks: { color: '#64748b' }
       }
     }
   };
@@ -130,14 +130,14 @@ const Prediction = () => {
   const getRiskIcon = (risk) => {
     if (!risk) return <Activity className="text-sky-400" />;
     if (risk.includes("Good") || risk.includes("Moderate")) return <CheckCircle2 className="text-emerald-400" size={32} />;
-    return <ShieldAlert className="text-rose-400 animate-pulse" size={32} />;
+    return <ShieldAlert className="text-rose-400" size={32} />;
   };
 
   const getRiskColor = (risk) => {
     if (!risk) return "text-slate-400";
     if (risk.includes("Good")) return "text-emerald-400";
     if (risk.includes("Moderate")) return "text-amber-400";
-    if (risk.includes("Unhealthy") || risk.includes("Hazardous")) return "text-rose-400 text-glow-violet";
+    if (risk.includes("Unhealthy") || risk.includes("Hazardous")) return "text-rose-400";
     return "text-slate-400";
   };
 
@@ -149,8 +149,8 @@ const Prediction = () => {
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100 tracking-tight">AI Forecasting Engine</h1>
-          <p className="text-slate-400 mt-1">Simulate environmental scenarios using our RandomForest model.</p>
+          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">AI Forecasting Engine</h1>
+          <p className="text-slate-400 mt-1 text-sm">Simulate environmental scenarios using our Machine Learning models.</p>
         </div>
       </div>
       
@@ -161,16 +161,14 @@ const Prediction = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-6 lg:col-span-1 relative overflow-hidden"
+          className="glass-card p-6 lg:col-span-1"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          
-          <h2 className="text-lg font-semibold text-slate-100 mb-6 flex items-center">
-            <Activity size={18} className="mr-2 text-violet-400" />
+          <h2 className="text-sm font-semibold text-slate-200 mb-5 flex items-center">
+            <Activity size={16} className="mr-2 text-indigo-400" />
             Simulation Parameters
           </h2>
           
-          <form onSubmit={handlePredict} className="space-y-5 relative z-10">
+          <form onSubmit={handlePredict} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'PM 2.5', name: 'pm25', step: '0.1' },
@@ -183,14 +181,14 @@ const Prediction = () => {
                 { label: 'Avg Speed', name: 'speed', step: '0.1' }
               ].map((field) => (
                 <div key={field.name}>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{field.label}</label>
+                  <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">{field.label}</label>
                   <input 
                     type="number" 
                     step={field.step} 
                     name={field.name} 
                     value={formData[field.name]} 
                     onChange={handleInputChange} 
-                    className="input-premium w-full px-3 py-2 text-sm" 
+                    className="input-premium w-full px-3 py-1.5 text-sm" 
                   />
                 </div>
               ))}
@@ -198,26 +196,26 @@ const Prediction = () => {
             <button 
               type="submit" 
               disabled={loading}
-              className={`w-full py-3 px-4 rounded-xl font-bold flex items-center justify-center transition-all ${
+              className={`w-full py-2.5 px-4 rounded-xl font-medium text-sm flex items-center justify-center transition-all mt-6 ${
                 loading 
-                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-sky-500 to-violet-600 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:scale-[1.02]'
+                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
+                  : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md border border-indigo-500'
               }`}
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-slate-400 border-t-white rounded-full animate-spin mr-2"></div>
+                  <div className="w-4 h-4 border-2 border-slate-500 border-t-white rounded-full animate-spin mr-2"></div>
                   Processing...
                 </>
               ) : (
                 <>
-                  Generate Prediction
-                  <ChevronRight size={18} className="ml-1" />
+                  Run Inference
+                  <ChevronRight size={16} className="ml-1" />
                 </>
               )}
             </button>
             {error && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-sm">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-xs">
                 {error}
               </motion.div>
             )}
@@ -232,29 +230,26 @@ const Prediction = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className={`glass-card p-6 relative overflow-hidden transition-all duration-500 ${predictionResult ? 'border-sky-500/30 shadow-[0_0_30px_rgba(56,189,248,0.1)]' : ''}`}
+            className={`glass-card p-6 transition-all duration-300 ${predictionResult ? 'border-sky-500/30 shadow-[0_0_20px_rgba(56,189,248,0.05)]' : ''}`}
           >
-            {predictionResult && (
-              <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-            )}
-            <h2 className="text-lg font-semibold text-slate-100 mb-6">Inference Result</h2>
+            <h2 className="text-sm font-semibold text-slate-200 mb-4">Inference Result</h2>
             
             {predictionResult ? (
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 relative z-10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
                 <div className="flex-1 text-center sm:text-left">
-                  <p className="text-sm font-medium text-slate-400 uppercase tracking-widest mb-1">Predicted AQI (1Hr)</p>
-                  <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 mb-2">
+                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Predicted AQI (1Hr)</p>
+                  <div className="text-5xl font-bold text-slate-100 mb-1">
                     {predictionResult.aqi_1hr}
                   </div>
-                  <p className="text-sm text-slate-500">Projected 24hr Peak: <span className="text-slate-300 font-semibold">{predictionResult.aqi_24hr}</span></p>
+                  <p className="text-xs text-slate-500">Projected 24hr Peak: <span className="text-slate-300 font-semibold">{predictionResult.aqi_24hr}</span></p>
                 </div>
                 
                 <div className="flex-1 flex flex-col items-center sm:items-end justify-center">
                   <div className="flex items-center space-x-3 mb-2">
                     {getRiskIcon(predictionResult.risk_level)}
                     <div className="text-right">
-                      <p className="text-sm font-medium text-slate-400 uppercase tracking-widest mb-1">Risk Assessment</p>
-                      <p className={`text-xl font-bold uppercase tracking-wider ${getRiskColor(predictionResult.risk_level)}`}>
+                      <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Risk Assessment</p>
+                      <p className={`text-lg font-bold uppercase tracking-wider ${getRiskColor(predictionResult.risk_level)}`}>
                         {predictionResult.risk_level}
                       </p>
                     </div>
@@ -262,7 +257,7 @@ const Prediction = () => {
                 </div>
               </div>
             ) : (
-              <div className="h-24 flex items-center justify-center text-slate-500 border border-dashed border-slate-700 rounded-xl">
+              <div className="h-20 flex items-center justify-center text-slate-500 text-sm border border-dashed border-slate-700/50 rounded-xl">
                 Enter parameters and run simulation to view results
               </div>
             )}
@@ -275,7 +270,7 @@ const Prediction = () => {
             transition={{ delay: 0.3 }}
             className="glass-card p-6 h-[400px] flex flex-col"
           >
-            <h2 className="text-lg font-semibold text-slate-100 mb-4">Trajectory Forecast</h2>
+            <h2 className="text-sm font-semibold text-slate-200 mb-4">Trajectory Forecast</h2>
             <div className="flex-1 relative w-full h-full">
               <Line options={options} data={data} />
             </div>
