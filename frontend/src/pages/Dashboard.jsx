@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchLivePollution, socket } from '../services/api';
-import { Wind, MapPin, AlertTriangle, Activity, Clock, Map as MapIcon, Search } from 'lucide-react';
+import { Wind, MapPin, AlertTriangle, Activity, Clock, Map as MapIcon, Search, Leaf, HeartPulse } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import axios from 'axios';
@@ -241,6 +241,11 @@ const Dashboard = () => {
   const uniqueZones = new Set(data.map(d => d.zone)).size || 4;
   const recentAlerts = data.filter(d => d.aqi > 150).length || 0;
 
+  // Advanced Smart City Metrics
+  const avgAqi = data.length > 0 ? data.reduce((acc, curr) => acc + curr.aqi, 0) / data.length : 80;
+  const sustainabilityScore = Math.max(10, Math.min(100, 100 - (avgAqi / 3)));
+  const cityHealthIndex = avgAqi < 50 ? 'A+' : avgAqi < 100 ? 'B' : avgAqi < 150 ? 'C' : 'F';
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -279,7 +284,7 @@ const Dashboard = () => {
       </div>
       
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
         <StatCard 
           title="Current AQI (Avg)" 
           value={latest.aqi ? Math.round(latest.aqi) : '--'} 
@@ -311,6 +316,22 @@ const Dashboard = () => {
           trend="Based on highest zone"
           trendColor="text-slate-400"
           delay={0.4}
+        />
+        <StatCard 
+          title="Sustainability" 
+          value={`${sustainabilityScore.toFixed(1)}/100`} 
+          icon={<Leaf className="text-emerald-400" size={20} />} 
+          trend="AI Generated Score"
+          trendColor="text-emerald-500"
+          delay={0.5}
+        />
+        <StatCard 
+          title="City Health Index" 
+          value={`Grade ${cityHealthIndex}`} 
+          icon={<HeartPulse className="text-rose-400" size={20} />} 
+          trend="Urban Vitality Status"
+          trendColor="text-sky-400"
+          delay={0.6}
         />
       </div>
 

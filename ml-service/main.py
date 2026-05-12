@@ -65,16 +65,15 @@ def predict(data: PredictionInput):
         raise HTTPException(status_code=503, detail="Model is not loaded. Train the model first.")
 
     try:
-        # Create a 2D array / DataFrame for prediction
         input_data = pd.DataFrame([{
             'pm25': data.pm25,
             'pm10': data.pm10,
-            'no2': data.no2,
+            'nox': data.no2,
             'co': data.co,
             'temperature': data.temperature,
             'humidity': data.humidity,
             'vehicle_count': data.vehicle_count,
-            'speed': data.speed
+            'avg_vehicle_speed': data.speed
         }])
         
         predicted_aqi = model.predict(input_data)[0]

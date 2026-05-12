@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 require('dotenv').config();
 
 const pollutionRoutes = require('./routes/pollutionRoutes');
+const advancedRoutes = require('./routes/advancedRoutes');
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use('/api/pollution', (req, res, next) => {
     req.io = req.app.get('io');
     next();
 }, pollutionRoutes);
+
+app.use('/api/advanced', advancedRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend is running');

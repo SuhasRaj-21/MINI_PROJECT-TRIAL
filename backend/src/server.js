@@ -2,6 +2,7 @@ const http = require('http');
 const app = require('./app');
 const connectDB = require('./config/db');
 const socketIo = require('socket.io');
+const logger = require('./config/logger');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 5000;
@@ -10,7 +11,7 @@ connectDB().then(async () => {
     const Pollution = require('./models/Pollution');
     const count = await Pollution.countDocuments();
     if (count === 0) {
-        console.log('Seeding mock pollution data...');
+        logger.info('Seeding mock pollution data...');
         const mockData = [
             { zone: 'Zone A', pm25: 55, pm10: 80, no2: 30, co: 1.5, temperature: 28, humidity: 65, vehicle_count: 1500, speed: 45, aqi: 130, risk_level: 'Unhealthy for Sensitive Groups', timestamp: new Date() },
             { zone: 'Zone B', pm25: 35, pm10: 50, no2: 20, co: 1.0, temperature: 29, humidity: 60, vehicle_count: 800, speed: 60, aqi: 85, risk_level: 'Moderate', timestamp: new Date() },
@@ -18,7 +19,7 @@ connectDB().then(async () => {
             { zone: 'Zone D', pm25: 20, pm10: 30, no2: 15, co: 0.5, temperature: 27, humidity: 70, vehicle_count: 400, speed: 70, aqi: 45, risk_level: 'Good', timestamp: new Date() },
         ];
         await Pollution.insertMany(mockData);
-        console.log('Mock data seeded.');
+        logger.info('Mock data seeded.');
     }
 
     // SIMULATE LIVE DATA STREAMING EVERY 5 SECONDS
@@ -60,14 +61,14 @@ const io = socketIo(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('New client connected: ', socket.id);
+    logger.info(`New client connected: ${socket.id}`);
     socket.on('disconnect', () => {
-        console.log('Client disconnected: ', socket.id);
+        logger.info(`Client disconnected: ${socket.id}`);
     });
 });
 
 app.set('io', io);
 
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
 });
